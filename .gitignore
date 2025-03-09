@@ -1,0 +1,23 @@
+
+# Python-related
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.python-version
+env/
+venv/
+.venv/
+.venv
+
+# enviroment variables
+.env
+
+# IDE or editor files
+.vscode/
+.idea/
+*.sublime-project
+*.iml
+
+# Flask instance folder
+instance/

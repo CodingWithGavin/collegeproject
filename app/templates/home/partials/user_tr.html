@@ -1,0 +1,26 @@
+
+<tr id="user-{{user.id}}">       
+    <td >{{ user.id }}</td>
+    <td>{{ user.name }}</td>
+
+    <td>
+        <!-- Edit button -->
+        <button class="btn btn-warning" 
+                hx-get="{{ url_for('get_user', user_id=user.id) }}" 
+                hx-target="#user-{{ user.id }}" 
+                hx-swap="outerHTML">
+                Edit
+        </button>
+        <button class="btn btn-danger"
+            hx-delete="{{ url_for('delete_user', user_id=user.id) }}"
+            hx-target="#user-{{ user.id }}"
+            hx-swap="outerHTML"
+            hx-confirm="Are you sure you want to delete user {{ user.name }}?"
+            hx-trigger="click">
+            Delete
+        </button>
+    </td>
+    
+        
+    
+</tr>

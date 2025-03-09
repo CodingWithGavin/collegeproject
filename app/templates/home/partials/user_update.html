@@ -1,0 +1,24 @@
+<tr id="user-{{ user.id }}">
+    <td>{{ user.id }}</td>
+    <td>
+            <input type="hidden" name="id" value="{{ user.id }}">
+            <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
+            
+        
+    </td>
+    <td>
+        <button class="btn btn-primary" 
+                hx-put="{{ url_for('update_user', user_id=user.id) }}" 
+                hx-target="#user-{{ user.id }}" 
+                hx-swap="outerHTML" 
+                hx-include="closest tr" 
+                type="submit" >Update</button>
+
+        <button class="btn btn-secondary" 
+                hx-get="{{ url_for('update_user', user_id=user.id) }}" 
+                hx-target="#user-{{ user.id }}" 
+                hx-swap="outerHTML" 
+                hx-include="closest tr" 
+                type="submit" >Cancel</button>
+    </td>
+</tr>
