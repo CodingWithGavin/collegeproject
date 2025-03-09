@@ -13,6 +13,9 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('AWS_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Set the secret key for secure sessions
+app.config['SECRET_KEY'] = os.getenv('FLASK_SECRETKEY')
+
 
 db.init_app(app)
 
