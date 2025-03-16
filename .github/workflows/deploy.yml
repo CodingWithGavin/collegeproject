@@ -1,0 +1,29 @@
+name: Deploy to S3
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for OIDC authentication
+      contents: read   # Allows reading repository contents
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Zip the application
+        run: zip -r my-app.zip . -x "*.git*"
+
+      - name: Configure AWS Credentials with OIDC
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::559050238744:role/GitHubUpdatestoS3Role
+          role-session-name: github-actions
+          aws-region: eu-west-1  # Change this if needed
+
+      - name: Upload to S3
+        run: aws s3 cp my-app.zip s3://project-app-updates/latest-app.zip
