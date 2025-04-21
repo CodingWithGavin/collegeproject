@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include "common/head.html"  %}
+    <title>Room - {{ room.room_code }}</title>
+</head>
+
+<body>
+    {% include "common/nav.html" %}
+    
+    <h2>Welcome to Room: {{ room.room_code }}</h2>
+    
+    <h3>Players in this Room:</h3>
+        <div    class="container" 
+                id="room-state"
+                hx-ext="sse"
+                sse-connect="/room/{{ room.room_code }}/events"
+                sse-swap="roomUpdate"
+                hx-get="/room/{{ room.room_code }}/sorted_players"
+                hx-trigger="sse:roomUpdate"
+                hx-target="#room-state"
+                hx-swap="innerHTML">
+                
+                {% include "rooms/partials/room_state.html" %}
+        </div>
+    
+    {% include "common/dependencies.html"  %}
+</body>
+</html>

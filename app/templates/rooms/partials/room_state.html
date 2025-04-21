@@ -1,0 +1,73 @@
+<div class="row" id="room-code" data-code="{{ room.room_code }}">
+    <!--Left Side-->
+    <div class="col-md-4">
+        <h2>Room Code: {{ room.room_code }}</h2>
+        <h3>Round Count: <span id="round-count">{{ room.round_count }}</span></h3>
+        <h3>Current Turn: <span id="current-turn">{{ room.current_turn }}</span></h3>
+        <h3>Session Start Time: {{ room.session_start_time }}</h3>
+
+        <div class="row g-3">
+            <div class="col-4">
+            <!-- Dice Rollers Section -->
+                <h4 class="mt-4">🎲 Roll the Dice!</h4>
+                <div id="dice-display" class="display-3" width="100">🎲</div>
+                <div id="dice-number" class="display-3">X</div>
+                <button class="btn btn-success mt-2" onclick="rollD6Dice()">Roll Dice</button>
+            </div>
+            <div class="col-4">
+                <h4 class="mt-4">Roll D20!</h4>
+                <img id ="d20-display" src="/static/images/d20_20Start.png" width="100">
+                <div id="d20-number" class="display-3">X</div>
+                <button class="btn btn-success mt-2" onclick="rollD20Dice()">Roll Dice</button>
+            </div>
+        </div>
+    </div>
+    <!--Right Side-->
+    <div class="col-md-6" >
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Initiative</th>
+                    <th scope="col">Hitpoints</th>
+                    <th scope="col">AC</th>
+                </tr>
+            </thead>
+                <tbody  id="playerList"
+                        hx-get="/room/{{ room.room_code }}/sorted_players"
+                        hx-trigger="load, refreshList" 
+                        hx-target="#playerList"
+                        hx-swap="innerHTML">
+                        <!-- worth noting here that if we added , hx-trigger="load,every 3s" we could have the players table load every3 seconds or however amount we want to keep the session updating and live-ish -->
+                    {% include "rooms/partials/player_list.html" %}
+                </tbody>
+        </table>
+        <form hx-post="/room/{{ room.room_code }}/end_turn" hx-swap="none">
+            <button type="submit" class="btn btn-danger mt-3">End Turn</button>
+        </form> 
+        <button id="updatePlayerListBtn" class="btn btn-primary">Update Player List</button>
+    </div>
+    {% include "common/dependencies.html"  %}
+</div>
+<script>
+    const roomCode = "{{ room.room_code }}";  // Ensure this variable is available
+
+    // Listen for SSE updates for the room and player list
+    const eventSource = new EventSource(`/room/${roomCode}/events`);
+
+    eventSource.addEventListener("roomUpdate", function(event) {
+        console.log("roomUpdate event received:", event.data);
+        const gameState = JSON.parse(event.data);  // Parse the received data
+
+        // Update the turn and round count dynamically
+        document.getElementById("current-turn").textContent = gameState.current_turn;
+        document.getElementById("round-count").textContent = gameState.round_count;
+
+        htmx.trigger("#playerList", "refreshList");  // Manually trigger the HTMX request to reload the player list
+    });
+    document.getElementById("updatePlayerListBtn").addEventListener("click", function () {
+    console.log("Triggering custom HTMX event: refreshList");
+    htmx.trigger("#playerList", "refreshList");
+});
+    
+</script>

@@ -11,6 +11,7 @@
                 hx-swap="outerHTML">
                 Edit
         </button>
+        <!-- Delete button -->
         <button class="btn btn-danger"
             hx-delete="{{ url_for('delete_user', user_id=user.id) }}"
             hx-target="#user-{{ user.id }}"

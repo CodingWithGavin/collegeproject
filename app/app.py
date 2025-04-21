@@ -2,7 +2,8 @@ from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
-from models.models import db, User
+from models.models import db, User, Player, Rooms
+
 import os
 
 load_dotenv()
@@ -22,6 +23,10 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 from routes.home_routes import *
+from routes.room_routes import *
+
+print(app.url_map)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
