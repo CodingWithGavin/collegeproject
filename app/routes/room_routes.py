@@ -186,7 +186,7 @@ def end_turn(room_code):
     
     # Only send updates if the turn or round count has changed
     if old_turn != room.current_turn or old_round_count != room.round_count:
-        # Send update to all clients listening on SSE (use proper data structure)
+        # Send update to all clients listening on SSE 
         for client in sse_clients.get(room_code, []):
             client.put(json.dumps(game_state))
 
