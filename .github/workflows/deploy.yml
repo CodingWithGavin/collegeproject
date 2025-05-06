@@ -23,7 +23,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::559050238744:role/GitHubUpdatestoS3Role
           role-session-name: github-actions
-          aws-region: eu-west-1  # Change this if needed
+          aws-region: eu-west-1  
 
       - name: Upload to S3
         run: aws s3 cp my-app.zip s3://project-app-updates/latest-app.zip
